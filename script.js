@@ -56,11 +56,16 @@
             introDismissed = true;
             introScreen.classList.add('hidden');
         }
-        // Dismiss on scroll or after 3 seconds
-        window.addEventListener('scroll', dismissIntro, { once: true });
-        window.addEventListener('wheel', dismissIntro, { once: true });
-        window.addEventListener('touchmove', dismissIntro, { once: true });
-        setTimeout(dismissIntro, 3000);
+        // Wait 1.5s before allowing scroll-dismiss (so the text is visible first)
+        setTimeout(() => {
+            window.addEventListener('scroll', dismissIntro, { once: true });
+            window.addEventListener('wheel', dismissIntro, { once: true });
+            window.addEventListener('touchmove', dismissIntro, { once: true });
+        }, 1500);
+        // Auto-dismiss after 3.5 seconds
+        setTimeout(dismissIntro, 3500);
+        // Prevent page from being scrolled while intro is showing
+        window.scrollTo(0, 0);
     }
 
     // --- Navigation ---
