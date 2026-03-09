@@ -126,6 +126,20 @@ em {
     50% { width: 120px; }
 }
 
+.loader-scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(245, 240, 235, 0.25);
+    animation: loaderScrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes loaderScrollBounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.25; }
+    50% { transform: translateX(-50%) translateY(6px); opacity: 0.5; }
+}
+
 /* --- Custom Cursor --- */
 .cursor {
     width: 8px;
