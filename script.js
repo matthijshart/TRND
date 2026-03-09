@@ -476,21 +476,7 @@
         });
     });
 
-    // --- Image Tilt Effect on Art Items ---
-    document.querySelectorAll('.art-item-inner').forEach(item => {
-        item.addEventListener('mousemove', (e) => {
-            const rect = item.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            item.style.transform = `perspective(800px) rotateY(${x * 5}deg) rotateX(${-y * 5}deg)`;
-        });
-
-        item.addEventListener('mouseleave', () => {
-            item.style.transform = 'perspective(800px) rotateY(0) rotateX(0)';
-            item.style.transition = 'transform 0.5s ease';
-            setTimeout(() => { item.style.transition = ''; }, 500);
-        });
-    });
+    // --- Image Tilt Effect on Art Items (disabled — hover now only shows overlay) ---
 
     // --- Scroll-based marquee speed ---
     const marqueeTrack = document.querySelector('.marquee-track');
