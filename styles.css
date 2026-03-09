@@ -980,7 +980,7 @@ em {
 }
 
 .art-item:hover .art-item-img {
-    transform: scale(1.08);
+    transform: none;
 }
 
 .art-item-overlay {
