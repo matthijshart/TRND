@@ -106,7 +106,10 @@
     let isDragging = false;
     let dragStartX = 0;
     let dragStartOffset = 0;
-    let currentOffset = 0; // current translateX offset (positive = moved left)
+    let currentOffset = 0;
+    let lastDragX = 0;
+    let dragVelocity = 0;
+    let lastDragTime = 0;
 
     function getMaxOffset() {
         if (!horizontalInner || !horizontalPin) return 0;
@@ -121,7 +124,7 @@
         const max = getMaxOffset();
         currentOffset = Math.max(0, Math.min(max, offset));
         horizontalInner.style.transition = animate
-            ? 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+            ? 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
             : 'none';
         horizontalInner.style.transform = `translateX(${-currentOffset}px)`;
         updateCounter();
@@ -132,12 +135,8 @@
         if (!hCurrentEl || !hTotalEl) return;
         const cards = getCards();
         if (!cards.length) return;
-        // Find which card is most in view
-        const cardWidth = cards[0].offsetWidth + 32; // gap
-        const idx = Math.min(
-            cards.length - 1,
-            Math.round(currentOffset / cardWidth)
-        );
+        const cardWidth = cards[0].offsetWidth + 32;
+        const idx = Math.min(cards.length - 1, Math.round(currentOffset / cardWidth));
         hCurrentEl.textContent = idx + 1;
         hTotalEl.textContent = cards.length;
     }
@@ -148,17 +147,16 @@
         hNextBtn.disabled = currentOffset >= getMaxOffset() - 1;
     }
 
-    function snapToCard(direction) {
+    function snapToCard(velocityHint) {
         const cards = getCards();
         if (!cards.length) return;
-        const cardWidth = cards[0].offsetWidth + 32; // card + gap
-        const currentIdx = currentOffset / cardWidth;
-        const targetIdx = direction > 0
-            ? Math.ceil(currentIdx + 0.1)
-            : Math.floor(currentIdx - 0.1);
+        const cardWidth = cards[0].offsetWidth + 32;
+        // Use velocity to determine how many cards to skip
+        const momentum = velocityHint * 0.3;
+        const projectedOffset = currentOffset + momentum;
+        const targetIdx = Math.round(projectedOffset / cardWidth);
         const clampedIdx = Math.max(0, Math.min(cards.length - 1, targetIdx));
-        const targetOffset = clampedIdx * cardWidth;
-        setOffset(targetOffset, true);
+        setOffset(clampedIdx * cardWidth, true);
     }
 
     // --- Drag (mouse) ---
@@ -167,22 +165,29 @@
             if (e.target.closest('.h-nav-btn')) return;
             isDragging = true;
             dragStartX = e.clientX;
+            lastDragX = e.clientX;
             dragStartOffset = currentOffset;
+            dragVelocity = 0;
+            lastDragTime = Date.now();
             horizontalPin.classList.add('dragging');
             e.preventDefault();
         });
 
         window.addEventListener('mousemove', e => {
             if (!isDragging) return;
-            const diff = dragStartX - e.clientX;
-            setOffset(dragStartOffset + diff, false);
+            const now = Date.now();
+            const dt = now - lastDragTime || 1;
+            dragVelocity = (lastDragX - e.clientX) / dt * 16; // px per frame
+            lastDragX = e.clientX;
+            lastDragTime = now;
+            setOffset(dragStartOffset + (dragStartX - e.clientX), false);
         });
 
         window.addEventListener('mouseup', () => {
             if (!isDragging) return;
             isDragging = false;
             horizontalPin.classList.remove('dragging');
-            snapToCard(currentOffset > dragStartOffset ? 1 : -1);
+            snapToCard(dragVelocity);
         });
 
         // --- Swipe (touch) ---
@@ -190,16 +195,22 @@
             if (e.target.closest('.h-nav-btn')) return;
             isDragging = true;
             dragStartX = e.touches[0].clientX;
+            lastDragX = e.touches[0].clientX;
             dragStartOffset = currentOffset;
+            dragVelocity = 0;
+            lastDragTime = Date.now();
         }, { passive: true });
 
         horizontalPin.addEventListener('touchmove', e => {
             if (!isDragging) return;
-            const diff = dragStartX - e.touches[0].clientX;
-            // Only hijack if horizontal swipe dominates
-            const dy = Math.abs(e.touches[0].clientY - (e.changedTouches[0]?.clientY || 0));
-            const dx = Math.abs(diff);
-            if (dx > 10) {
+            const touch = e.touches[0];
+            const diff = dragStartX - touch.clientX;
+            const now = Date.now();
+            const dt = now - lastDragTime || 1;
+            dragVelocity = (lastDragX - touch.clientX) / dt * 16;
+            lastDragX = touch.clientX;
+            lastDragTime = now;
+            if (Math.abs(diff) > 8) {
                 e.preventDefault();
                 setOffset(dragStartOffset + diff, false);
             }
@@ -208,15 +219,21 @@
         horizontalPin.addEventListener('touchend', e => {
             if (!isDragging) return;
             isDragging = false;
-            const endX = e.changedTouches[0].clientX;
-            const diff = dragStartX - endX;
-            snapToCard(diff > 30 ? 1 : diff < -30 ? -1 : 0);
+            snapToCard(dragVelocity);
         });
     }
 
     // --- Arrow buttons ---
-    if (hPrevBtn) hPrevBtn.addEventListener('click', () => snapToCard(-1));
-    if (hNextBtn) hNextBtn.addEventListener('click', () => snapToCard(1));
+    function snapDirection(dir) {
+        const cards = getCards();
+        if (!cards.length) return;
+        const cardWidth = cards[0].offsetWidth + 32;
+        const currentIdx = Math.round(currentOffset / cardWidth);
+        const targetIdx = Math.max(0, Math.min(cards.length - 1, currentIdx + dir));
+        setOffset(targetIdx * cardWidth, true);
+    }
+    if (hPrevBtn) hPrevBtn.addEventListener('click', () => snapDirection(-1));
+    if (hNextBtn) hNextBtn.addEventListener('click', () => snapDirection(1));
 
     // Initialize carousel counter & buttons
     updateCounter();
