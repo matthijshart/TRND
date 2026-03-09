@@ -66,58 +66,64 @@ em {
     font-weight: 400;
 }
 
-/* --- Intro Screen --- */
-.intro-screen {
+/* --- Loader --- */
+.loader {
     position: fixed;
     inset: 0;
-    z-index: 10001;
-    background: var(--walnut-dark);
+    background: var(--bg-dark);
+    z-index: 9999;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
-                visibility 1s;
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
 }
 
-.intro-screen.hidden {
+.loader.hidden {
     opacity: 0;
     visibility: hidden;
-    pointer-events: none;
 }
 
-.intro-logo {
+.loader-inner {
+    text-align: center;
+    position: relative;
+}
+
+.loader-text {
+    display: block;
     font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(4rem, 12vw, 10rem);
+    font-size: clamp(3rem, 8vw, 6rem);
     font-weight: 700;
     color: var(--cream);
-    letter-spacing: -0.04em;
-    line-height: 1;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: introReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    letter-spacing: 0.2em;
+    animation: loaderPulse 1.5s ease-in-out infinite;
 }
 
-.intro-dot {
+.loader-sub {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
     color: var(--gold);
-}
-
-.intro-tagline {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 300;
-    color: rgba(245, 240, 235, 0.5);
-    letter-spacing: 0.25em;
+    letter-spacing: 0.5em;
     text-transform: uppercase;
-    margin-top: 1rem;
-    opacity: 0;
-    transform: translateY(10px);
-    animation: introReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+    margin-top: 0.5rem;
 }
 
-@keyframes introReveal {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+.loader-line {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 2rem;
+    animation: loaderLine 1.5s ease-in-out infinite;
+}
+
+@keyframes loaderPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+@keyframes loaderLine {
+    0%, 100% { width: 60px; }
+    50% { width: 120px; }
 }
 
 /* --- Custom Cursor --- */
