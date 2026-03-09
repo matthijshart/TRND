@@ -107,43 +107,169 @@
         });
     });
 
-    // --- Horizontal Scroll ---
+    // --- Horizontal Scroll + Drag/Swipe ---
     const horizontalSection = document.querySelector('.horizontal-section');
-    const horizontalInner = document.querySelector('.horizontal-inner');
+    const horizontalInner = document.getElementById('horizontalInner');
+    const horizontalPin = document.querySelector('.horizontal-pin');
+    const hPrevBtn = document.getElementById('hPrev');
+    const hNextBtn = document.getElementById('hNext');
+    const hCurrentEl = document.getElementById('hCurrent');
+    const hTotalEl = document.getElementById('hTotal');
+
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let currentOffset = 0; // current translateX offset (positive = moved left)
+
+    function getMaxOffset() {
+        if (!horizontalInner) return 0;
+        return Math.max(0, horizontalInner.scrollWidth - window.innerWidth);
+    }
+
+    function getCards() {
+        return horizontalInner ? horizontalInner.querySelectorAll('.h-card') : [];
+    }
+
+    function setOffset(offset, animate = false) {
+        const max = getMaxOffset();
+        currentOffset = Math.max(0, Math.min(max, offset));
+        horizontalInner.style.transition = animate
+            ? 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+            : 'none';
+        horizontalInner.style.transform = `translateX(${-currentOffset}px)`;
+        updateCounter();
+        updateNavButtons();
+    }
+
+    function syncScrollToOffset(offset) {
+        // After drag/swipe, sync the page scroll so scroll-driven anim stays in sync
+        const max = getMaxOffset();
+        const progress = max > 0 ? offset / max : 0;
+        const sectionTop = horizontalSection.offsetTop;
+        const sectionHeight = horizontalSection.offsetHeight;
+        const targetScroll = sectionTop + progress * (sectionHeight - window.innerHeight);
+        window.scrollTo({ top: targetScroll, behavior: 'instant' });
+    }
+
+    function updateCounter() {
+        if (!hCurrentEl || !hTotalEl) return;
+        const cards = getCards();
+        if (!cards.length) return;
+        // Find which card is most in view
+        const cardWidth = cards[0].offsetWidth + 32; // gap
+        const idx = Math.min(
+            cards.length - 1,
+            Math.round(currentOffset / cardWidth)
+        );
+        hCurrentEl.textContent = idx + 1;
+        hTotalEl.textContent = cards.length;
+    }
+
+    function updateNavButtons() {
+        if (!hPrevBtn || !hNextBtn) return;
+        hPrevBtn.disabled = currentOffset <= 0;
+        hNextBtn.disabled = currentOffset >= getMaxOffset() - 1;
+    }
+
+    function snapToCard(direction) {
+        const cards = getCards();
+        if (!cards.length) return;
+        const cardWidth = cards[0].offsetWidth + 32; // card + gap
+        const currentIdx = currentOffset / cardWidth;
+        const targetIdx = direction > 0
+            ? Math.ceil(currentIdx + 0.1)
+            : Math.floor(currentIdx - 0.1);
+        const clampedIdx = Math.max(0, Math.min(cards.length - 1, targetIdx));
+        const targetOffset = clampedIdx * cardWidth;
+        setOffset(targetOffset, true);
+        syncScrollToOffset(targetOffset);
+    }
 
     function setupHorizontalScroll() {
         if (!horizontalSection || !horizontalInner) return;
-
-        // Calculate how wide the horizontal content is
-        const scrollWidth = horizontalInner.scrollWidth;
-        const viewportWidth = window.innerWidth;
-        const scrollDistance = scrollWidth - viewportWidth;
-
-        // Set the section height to create the scroll space
-        // (scrollDistance = how many px we need to scroll vertically to see all horizontal content)
+        const scrollDistance = getMaxOffset();
         horizontalSection.style.height = (scrollDistance + window.innerHeight) + 'px';
+        updateCounter();
+        updateNavButtons();
     }
 
     function handleHorizontalScroll() {
-        if (!horizontalSection || !horizontalInner) return;
+        if (!horizontalSection || !horizontalInner || isDragging) return;
 
         const rect = horizontalSection.getBoundingClientRect();
         const sectionHeight = horizontalSection.offsetHeight;
-        const viewportHeight = window.innerHeight;
-        const scrollDistance = sectionHeight - viewportHeight;
-
-        // How far we've scrolled into the section
+        const scrollDistance = sectionHeight - window.innerHeight;
         const scrolled = -rect.top;
         const progress = Math.max(0, Math.min(1, scrolled / scrollDistance));
+        const offset = progress * getMaxOffset();
 
-        // Translate the inner container
-        const maxTranslate = horizontalInner.scrollWidth - window.innerWidth;
-        horizontalInner.style.transform = `translateX(${-progress * maxTranslate}px)`;
+        setOffset(offset, false);
     }
+
+    // --- Drag (mouse) ---
+    if (horizontalPin) {
+        horizontalPin.addEventListener('mousedown', e => {
+            if (e.target.closest('.h-nav-btn')) return;
+            isDragging = true;
+            dragStartX = e.clientX;
+            dragStartOffset = currentOffset;
+            horizontalPin.classList.add('dragging');
+            e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', e => {
+            if (!isDragging) return;
+            const diff = dragStartX - e.clientX;
+            setOffset(dragStartOffset + diff, false);
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            horizontalPin.classList.remove('dragging');
+            snapToCard(currentOffset > dragStartOffset ? 1 : -1);
+        });
+
+        // --- Swipe (touch) ---
+        horizontalPin.addEventListener('touchstart', e => {
+            if (e.target.closest('.h-nav-btn')) return;
+            isDragging = true;
+            dragStartX = e.touches[0].clientX;
+            dragStartOffset = currentOffset;
+        }, { passive: true });
+
+        horizontalPin.addEventListener('touchmove', e => {
+            if (!isDragging) return;
+            const diff = dragStartX - e.touches[0].clientX;
+            // Only hijack if horizontal swipe dominates
+            const dy = Math.abs(e.touches[0].clientY - (e.changedTouches[0]?.clientY || 0));
+            const dx = Math.abs(diff);
+            if (dx > 10) {
+                e.preventDefault();
+                setOffset(dragStartOffset + diff, false);
+            }
+        }, { passive: false });
+
+        horizontalPin.addEventListener('touchend', e => {
+            if (!isDragging) return;
+            isDragging = false;
+            const endX = e.changedTouches[0].clientX;
+            const diff = dragStartX - endX;
+            snapToCard(diff > 30 ? 1 : diff < -30 ? -1 : 0);
+        });
+    }
+
+    // --- Arrow buttons ---
+    if (hPrevBtn) hPrevBtn.addEventListener('click', () => snapToCard(-1));
+    if (hNextBtn) hNextBtn.addEventListener('click', () => snapToCard(1));
 
     // Set up on load and resize
     setupHorizontalScroll();
-    window.addEventListener('resize', setupHorizontalScroll);
+    window.addEventListener('resize', () => {
+        setupHorizontalScroll();
+        // Re-apply current offset after resize
+        setOffset(currentOffset, false);
+    });
 
     // --- Parallax Effect ---
     function handleParallax() {
