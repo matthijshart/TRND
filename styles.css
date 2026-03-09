@@ -888,6 +888,21 @@ em {
     color: var(--walnut);
 }
 
+.bestseller-badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.15rem 0.5rem;
+    background: var(--gold);
+    color: var(--cream);
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
 /* --- Parallax Break --- */
 .parallax-break {
     position: relative;
