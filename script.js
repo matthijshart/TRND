@@ -109,29 +109,41 @@
 
     // --- Horizontal Scroll ---
     const horizontalSection = document.querySelector('.horizontal-section');
-    const horizontalTrigger = document.querySelector('.horizontal-trigger');
-    const horizontalTrack = document.getElementById('horizontalTrack');
+    const horizontalInner = document.querySelector('.horizontal-inner');
+
+    function setupHorizontalScroll() {
+        if (!horizontalSection || !horizontalInner) return;
+
+        // Calculate how wide the horizontal content is
+        const scrollWidth = horizontalInner.scrollWidth;
+        const viewportWidth = window.innerWidth;
+        const scrollDistance = scrollWidth - viewportWidth;
+
+        // Set the section height to create the scroll space
+        // (scrollDistance = how many px we need to scroll vertically to see all horizontal content)
+        horizontalSection.style.height = (scrollDistance + window.innerHeight) + 'px';
+    }
 
     function handleHorizontalScroll() {
-        if (!horizontalSection || !horizontalTrack) return;
+        if (!horizontalSection || !horizontalInner) return;
 
         const rect = horizontalSection.getBoundingClientRect();
-        const sectionTop = rect.top;
-        const sectionHeight = horizontalTrigger.offsetHeight;
+        const sectionHeight = horizontalSection.offsetHeight;
         const viewportHeight = window.innerHeight;
+        const scrollDistance = sectionHeight - viewportHeight;
 
-        // Calculate scroll progress within the section
-        const scrolled = -sectionTop;
-        const maxScroll = sectionHeight - viewportHeight;
-        const progress = Math.max(0, Math.min(1, scrolled / maxScroll));
+        // How far we've scrolled into the section
+        const scrolled = -rect.top;
+        const progress = Math.max(0, Math.min(1, scrolled / scrollDistance));
 
-        // Calculate how far to translate
-        const trackWidth = horizontalTrack.scrollWidth;
-        const containerWidth = window.innerWidth;
-        const maxTranslate = trackWidth - containerWidth + 60; // 60 for padding
-
-        horizontalTrack.style.transform = `translateX(${-progress * maxTranslate}px)`;
+        // Translate the inner container
+        const maxTranslate = horizontalInner.scrollWidth - window.innerWidth;
+        horizontalInner.style.transform = `translateX(${-progress * maxTranslate}px)`;
     }
+
+    // Set up on load and resize
+    setupHorizontalScroll();
+    window.addEventListener('resize', setupHorizontalScroll);
 
     // --- Parallax Effect ---
     function handleParallax() {
@@ -180,9 +192,13 @@
         const contactRight = document.querySelector('.contact-right');
         if (contactRight) contactRight.classList.add('fade-up');
 
-        // Philosophy label & footer
+        // Philosophy label, manifesto & footer
         const philLabel = document.querySelector('.philosophy-label');
         if (philLabel) philLabel.classList.add('fade-up');
+        const philAttribution = document.querySelector('.philosophy-attribution');
+        if (philAttribution) philAttribution.classList.add('fade-up');
+        const manifesto = document.querySelector('.manifesto-text');
+        if (manifesto) manifesto.classList.add('split-text');
         const philFooter = document.querySelector('.philosophy-footer');
         if (philFooter) philFooter.classList.add('fade-up');
 
