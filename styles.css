@@ -365,9 +365,9 @@ em {
     animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.title-line:nth-child(1) { animation-delay: 0.1s; }
-.title-line:nth-child(2) { animation-delay: 0.22s; }
-.title-line:nth-child(3) { animation-delay: 0.34s; }
+.title-line:nth-child(1) { animation-delay: 2.0s; }
+.title-line:nth-child(2) { animation-delay: 2.15s; }
+.title-line:nth-child(3) { animation-delay: 2.3s; }
 
 .title-italic {
     font-family: 'Cormorant Garamond', serif;
@@ -386,11 +386,11 @@ em {
     color: rgba(245, 240, 235, 0.7);
     font-weight: 300;
     letter-spacing: 0.05em;
-    animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.46s both;
+    animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 2.45s both;
 }
 
 .hero-tag span {
-    animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0s both;
+    animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 1.9s both;
 }
 
 @keyframes heroFadeUp {
@@ -409,7 +409,7 @@ em {
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+    animation: heroFadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 2.7s both;
 }
 
 .scroll-mouse {
