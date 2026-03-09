@@ -8,6 +8,8 @@
 
     // --- Loader ---
     const loader = document.getElementById('loader');
+    // Scroll back to top so iOS doesn't auto-fire a scroll event
+    window.scrollTo(0, 0);
     function dismissLoader() {
         loader.classList.add('hidden');
         document.querySelector('.hero').classList.add('loaded');
@@ -15,9 +17,13 @@
         window.removeEventListener('wheel', dismissLoader);
         window.removeEventListener('touchmove', dismissLoader);
     }
-    window.addEventListener('scroll', dismissLoader);
-    window.addEventListener('wheel', dismissLoader);
-    window.addEventListener('touchmove', dismissLoader);
+    // Small delay before attaching listeners to avoid iOS scroll-restoration
+    // firing the event immediately on load
+    setTimeout(() => {
+        window.addEventListener('scroll', dismissLoader);
+        window.addEventListener('wheel', dismissLoader);
+        window.addEventListener('touchmove', dismissLoader);
+    }, 300);
 
     // --- Custom Cursor ---
     const cursor = document.getElementById('cursor');
