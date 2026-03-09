@@ -8,11 +8,16 @@
 
     // --- Loader ---
     const loader = document.getElementById('loader');
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            loader.classList.add('hidden');
-        }, 1800);
-    });
+    function dismissLoader() {
+        loader.classList.add('hidden');
+        document.querySelector('.hero').classList.add('loaded');
+        window.removeEventListener('scroll', dismissLoader);
+        window.removeEventListener('wheel', dismissLoader);
+        window.removeEventListener('touchmove', dismissLoader);
+    }
+    window.addEventListener('scroll', dismissLoader);
+    window.addEventListener('wheel', dismissLoader);
+    window.addEventListener('touchmove', dismissLoader);
 
     // --- Custom Cursor ---
     const cursor = document.getElementById('cursor');
