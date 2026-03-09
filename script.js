@@ -101,8 +101,8 @@
     let currentOffset = 0; // current translateX offset (positive = moved left)
 
     function getMaxOffset() {
-        if (!horizontalInner) return 0;
-        return Math.max(0, horizontalInner.scrollWidth - window.innerWidth);
+        if (!horizontalInner || !horizontalPin) return 0;
+        return Math.max(0, horizontalInner.scrollWidth - horizontalPin.clientWidth);
     }
 
     function getCards() {
@@ -118,16 +118,6 @@
         horizontalInner.style.transform = `translateX(${-currentOffset}px)`;
         updateCounter();
         updateNavButtons();
-    }
-
-    function syncScrollToOffset(offset) {
-        // After drag/swipe, sync the page scroll so scroll-driven anim stays in sync
-        const max = getMaxOffset();
-        const progress = max > 0 ? offset / max : 0;
-        const sectionTop = horizontalSection.offsetTop;
-        const sectionHeight = horizontalSection.offsetHeight;
-        const targetScroll = sectionTop + progress * (sectionHeight - window.innerHeight);
-        window.scrollTo({ top: targetScroll, behavior: 'instant' });
     }
 
     function updateCounter() {
@@ -161,28 +151,6 @@
         const clampedIdx = Math.max(0, Math.min(cards.length - 1, targetIdx));
         const targetOffset = clampedIdx * cardWidth;
         setOffset(targetOffset, true);
-        syncScrollToOffset(targetOffset);
-    }
-
-    function setupHorizontalScroll() {
-        if (!horizontalSection || !horizontalInner) return;
-        const scrollDistance = getMaxOffset();
-        horizontalSection.style.height = (scrollDistance + window.innerHeight) + 'px';
-        updateCounter();
-        updateNavButtons();
-    }
-
-    function handleHorizontalScroll() {
-        if (!horizontalSection || !horizontalInner || isDragging) return;
-
-        const rect = horizontalSection.getBoundingClientRect();
-        const sectionHeight = horizontalSection.offsetHeight;
-        const scrollDistance = sectionHeight - window.innerHeight;
-        const scrolled = -rect.top;
-        const progress = Math.max(0, Math.min(1, scrolled / scrollDistance));
-        const offset = progress * getMaxOffset();
-
-        setOffset(offset, false);
     }
 
     // --- Drag (mouse) ---
@@ -242,11 +210,10 @@
     if (hPrevBtn) hPrevBtn.addEventListener('click', () => snapToCard(-1));
     if (hNextBtn) hNextBtn.addEventListener('click', () => snapToCard(1));
 
-    // Set up on load and resize
-    setupHorizontalScroll();
+    // Initialize carousel counter & buttons
+    updateCounter();
+    updateNavButtons();
     window.addEventListener('resize', () => {
-        setupHorizontalScroll();
-        // Re-apply current offset after resize
         setOffset(currentOffset, false);
     });
 
@@ -405,7 +372,6 @@
 
     // --- Main scroll handler ---
     function onScroll() {
-        handleHorizontalScroll();
         handleParallax();
         updateMarqueeSpeed();
     }

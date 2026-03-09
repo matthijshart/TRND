@@ -605,13 +605,11 @@ em {
 .horizontal-section {
     position: relative;
     background: var(--warm-white);
-    overflow: hidden;
 }
 
 .horizontal-pin {
-    position: sticky;
-    top: 0;
-    height: 100vh;
+    position: relative;
+    padding: 0 0 5rem;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -626,6 +624,7 @@ em {
 .horizontal-inner {
     display: flex;
     align-items: center;
+    padding-left: 4vw;
     will-change: transform;
     pointer-events: none; /* let pin handle drag, re-enable on cards */
 }
