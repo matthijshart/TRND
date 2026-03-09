@@ -108,6 +108,24 @@ em {
     margin-top: 0.5rem;
 }
 
+.loader-cities {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 1rem;
+}
+
+.loader-cities span {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    opacity: 0.5;
+}
+
 .loader-line {
     width: 60px;
     height: 1px;
