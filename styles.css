@@ -672,12 +672,77 @@ em {
     display: flex;
     align-items: center;
     overflow: hidden;
+    cursor: grab;
+    user-select: none;
+}
+
+.horizontal-pin.dragging {
+    cursor: grabbing;
 }
 
 .horizontal-inner {
     display: flex;
     align-items: center;
     will-change: transform;
+    pointer-events: none; /* let pin handle drag, re-enable on cards */
+}
+
+.h-card {
+    pointer-events: all;
+}
+
+/* --- Horizontal Nav Buttons --- */
+.h-nav {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    background: rgba(245, 240, 235, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.6rem 1.2rem;
+}
+
+.h-nav-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--walnut-dark);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.h-nav-btn:hover {
+    background: var(--walnut);
+    transform: scale(1.1);
+}
+
+.h-nav-btn:disabled {
+    opacity: 0.3;
+    transform: none;
+    cursor: default;
+}
+
+.h-nav-counter {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-light);
+    letter-spacing: 0.1em;
+    min-width: 40px;
+    text-align: center;
 }
 
 .horizontal-header {
