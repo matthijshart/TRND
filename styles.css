@@ -1567,6 +1567,129 @@ body::-webkit-scrollbar-thumb {
     border-radius: 3px;
 }
 
+/* --- Bestel Hier Button --- */
+.bestel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.8rem;
+    padding: 0.6rem 1.4rem;
+    background: var(--walnut-dark);
+    color: var(--cream);
+    border: none;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    z-index: 5;
+}
+
+.bestel-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--walnut);
+    transform: translateX(-101%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 100px;
+}
+
+.bestel-btn:hover::before {
+    transform: translateX(0);
+}
+
+.bestel-btn:hover {
+    transform: scale(1.05);
+}
+
+.art-item-overlay .bestel-btn {
+    margin-top: 0.6rem;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.7rem;
+    background: var(--gold);
+    color: var(--bg-dark);
+}
+
+.art-item-overlay .bestel-btn::before {
+    background: var(--gold-light);
+}
+
+/* --- Image Zoom Lightbox --- */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+    cursor: pointer;
+}
+
+.lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 48px;
+    height: 48px;
+    background: rgba(245, 240, 235, 0.1);
+    border: 1px solid rgba(245, 240, 235, 0.2);
+    border-radius: 50%;
+    color: var(--cream);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.lightbox-close:hover {
+    background: rgba(245, 240, 235, 0.2);
+    transform: rotate(90deg);
+}
+
+.lightbox-content {
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lightbox-img {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: default;
+}
+
+.lightbox.active .lightbox-img {
+    transform: scale(1);
+}
+
 /* --- Grain texture overlay --- */
 body::after {
     content: '';

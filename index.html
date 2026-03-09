@@ -163,7 +163,7 @@
                         <span class="h-card-price">&euro;96</span>
                     </div>
                 </div>
-                <a href="https://buy.stripe.com/test_14AeVdckvgsh4dkc5FcAo00" target="_blank" class="h-card" style="text-decoration:none;color:inherit;">
+                <div class="h-card" data-stripe="https://buy.stripe.com/test_14AeVdckvgsh4dkc5FcAo00">
                     <div class="h-card-img-wrap">
                         <img src="assets/images/round-side-table.png" alt="Side Table" class="h-card-img">
                     </div>
@@ -172,8 +172,9 @@
                         <h3 class="h-card-title">Round Side Table</h3>
                         <p class="h-card-desc">Massief walnoot hout</p>
                         <span class="h-card-price">&euro;60</span>
+                        <a href="https://buy.stripe.com/test_14AeVdckvgsh4dkc5FcAo00" target="_blank" class="bestel-btn">Bestel hier</a>
                     </div>
-                </a>
+                </div>
                 <div class="h-card">
                     <div class="h-card-img-wrap">
                         <img src="assets/images/tree-bookshelf.png" alt="Tree Bookshelf" class="h-card-img">
@@ -185,7 +186,7 @@
                         <span class="h-card-price">&euro;43</span>
                     </div>
                 </div>
-                <a href="https://buy.stripe.com/test_bJe5kD2JV1xn5ho8TtcAo02" target="_blank" class="h-card" style="text-decoration:none;color:inherit;">
+                <div class="h-card" data-stripe="https://buy.stripe.com/test_bJe5kD2JV1xn5ho8TtcAo02">
                     <div class="h-card-img-wrap">
                         <img src="assets/images/wine-rack.png" alt="Wine Rack" class="h-card-img">
                     </div>
@@ -194,8 +195,9 @@
                         <h3 class="h-card-title">Wave Wine Rack</h3>
                         <p class="h-card-desc">Handgemaakt walnoot</p>
                         <span class="h-card-price">&euro;30</span>
+                        <a href="https://buy.stripe.com/test_bJe5kD2JV1xn5ho8TtcAo02" target="_blank" class="bestel-btn">Bestel hier</a>
                     </div>
-                </a>
+                </div>
                 <div class="h-card">
                     <div class="h-card-img-wrap">
                         <img src="assets/images/coffee-station.png" alt="Coffee Station" class="h-card-img">
@@ -265,15 +267,16 @@
             <h2 class="section-title">Wall Art<br>& <em>Coffee Table</em></h2>
         </div>
         <div class="art-grid">
-            <a href="https://buy.stripe.com/test_aFabJ1gALek9aBIc5FcAo01" target="_blank" class="art-item art-item-tall" style="text-decoration:none;color:inherit;">
+            <div class="art-item art-item-tall" data-stripe="https://buy.stripe.com/test_aFabJ1gALek9aBIc5FcAo01">
                 <div class="art-item-inner">
                     <img src="assets/images/red-stripe-art.png" alt="Red Stripe Art" class="art-item-img">
                     <div class="art-item-overlay">
                         <h3>Red Stripes Print</h3>
                         <span>&euro;63</span>
+                        <a href="https://buy.stripe.com/test_aFabJ1gALek9aBIc5FcAo01" target="_blank" class="bestel-btn">Bestel hier</a>
                     </div>
                 </div>
-            </a>
+            </div>
             <div class="art-item art-item-wide">
                 <div class="art-item-inner">
                     <img src="assets/images/coffee-table-books.png" alt="Coffee Table Books" class="art-item-img">
@@ -419,6 +422,14 @@
             </div>
         </div>
     </footer>
+
+    <!-- Image Zoom Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Sluiten">&times;</button>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-img" id="lightboxImg">
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
