@@ -6,6 +6,14 @@
 (function () {
     'use strict';
 
+    // --- Loader ---
+    const loader = document.getElementById('loader');
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 1800);
+    });
+
     // --- Custom Cursor ---
     const cursor = document.getElementById('cursor');
     const follower = document.getElementById('cursor-follower');
@@ -45,27 +53,6 @@
         cursor.style.display = 'none';
         follower.style.display = 'none';
         document.body.style.cursor = 'auto';
-    }
-
-    // --- Intro Screen ---
-    const introScreen = document.getElementById('introScreen');
-    if (introScreen) {
-        let introDismissed = false;
-        function dismissIntro() {
-            if (introDismissed) return;
-            introDismissed = true;
-            introScreen.classList.add('hidden');
-        }
-        // Wait 1.5s before allowing scroll-dismiss (so the text is visible first)
-        setTimeout(() => {
-            window.addEventListener('scroll', dismissIntro, { once: true });
-            window.addEventListener('wheel', dismissIntro, { once: true });
-            window.addEventListener('touchmove', dismissIntro, { once: true });
-        }, 1500);
-        // Auto-dismiss after 3.5 seconds
-        setTimeout(dismissIntro, 3500);
-        // Prevent page from being scrolled while intro is showing
-        window.scrollTo(0, 0);
     }
 
     // --- Navigation ---
