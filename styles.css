@@ -501,11 +501,15 @@ em {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
 }
 
 .philosophy-inner {
-    max-width: 900px;
+    max-width: 960px;
     text-align: center;
+    position: relative;
 }
 
 .philosophy-label,
@@ -513,7 +517,7 @@ em {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
     justify-content: center;
 }
 
@@ -532,23 +536,91 @@ em {
     color: var(--text-light);
 }
 
+.philosophy-quote-wrap {
+    position: relative;
+    margin-bottom: 3rem;
+}
+
+.philosophy-open-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(6rem, 12vw, 10rem);
+    color: var(--walnut);
+    opacity: 0.1;
+    position: absolute;
+    top: -3.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 1;
+    pointer-events: none;
+}
+
 .philosophy-text {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+    font-size: clamp(1.8rem, 4vw, 3.2rem);
     font-weight: 300;
-    line-height: 1.5;
+    line-height: 1.45;
     color: var(--text);
-    margin-bottom: 3rem;
+    position: relative;
 }
 
 .philosophy-text em {
     color: var(--walnut);
+    font-weight: 500;
+}
+
+.philosophy-attribution {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.philosophy-author {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.05em;
+}
+
+.philosophy-role {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.philosophy-manifesto {
+    margin-bottom: 3rem;
+}
+
+.manifesto-text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.manifesto-text em {
+    color: var(--walnut);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15em;
 }
 
 .philosophy-footer {
     display: flex;
     justify-content: center;
-    gap: 3rem;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.philosophy-divider {
+    width: 30px;
+    height: 1px;
+    background: var(--text-muted);
 }
 
 .philosophy-year,
@@ -590,19 +662,29 @@ em {
 .horizontal-section {
     position: relative;
     background: var(--warm-white);
+    overflow: hidden;
 }
 
-.horizontal-trigger {
-    height: 500vh;
-    position: relative;
+.horizontal-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.horizontal-inner {
+    display: flex;
+    align-items: center;
+    will-change: transform;
 }
 
 .horizontal-header {
-    position: sticky;
-    top: 0;
-    padding: 3rem 3rem 0;
+    flex-shrink: 0;
+    width: 340px;
+    padding: 0 3rem;
     z-index: 2;
-    pointer-events: none;
 }
 
 .horizontal-header .section-label {
@@ -612,12 +694,8 @@ em {
 .horizontal-track {
     display: flex;
     gap: 2rem;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    align-items: center;
-    padding: 0 3rem;
-    will-change: transform;
+    padding: 0 2rem 0 0;
+    flex-shrink: 0;
 }
 
 .h-card {
@@ -1316,11 +1394,12 @@ em {
     }
 
     .horizontal-header {
-        padding: 2rem 1.5rem 0;
+        width: auto;
+        padding: 0 1.5rem;
+        flex-shrink: 0;
     }
 
     .horizontal-track {
-        padding: 0 1.5rem;
         gap: 1rem;
     }
 
