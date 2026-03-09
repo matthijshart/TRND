@@ -1,1 +1,404 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRND — Amsterdam Home Décor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
 
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-inner">
+            <div class="loader-line"></div>
+            <span class="loader-text">TRND</span>
+            <span class="loader-sub">Amsterdam</span>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">TRND<span class="nav-dot">.</span></a>
+        <div class="nav-links">
+            <a href="#collection" class="nav-link" data-text="Collectie">Collectie</a>
+            <a href="#story" class="nav-link" data-text="Verhaal">Verhaal</a>
+            <a href="#lifestyle" class="nav-link" data-text="Lifestyle">Lifestyle</a>
+            <a href="#contact" class="nav-link" data-text="Contact">Contact</a>
+        </div>
+        <button class="nav-menu-btn" id="menuBtn" aria-label="Menu">
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-links">
+            <a href="#collection" class="mobile-link">Collectie</a>
+            <a href="#story" class="mobile-link">Verhaal</a>
+            <a href="#lifestyle" class="mobile-link">Lifestyle</a>
+            <a href="#contact" class="mobile-link">Contact</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <img src="assets/images/scandinavian-room.jpeg" alt="Scandinavian Interior" class="hero-bg-img">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-tag">
+                <span class="reveal-text" data-delay="0.8">Amsterdam — Walnoot & Warmte</span>
+            </div>
+            <h1 class="hero-title">
+                <span class="title-line"><span class="reveal-text" data-delay="1.0">Curated</span></span>
+                <span class="title-line"><span class="reveal-text" data-delay="1.2">Living</span></span>
+                <span class="title-line title-italic"><span class="reveal-text" data-delay="1.4">Spaces</span></span>
+            </h1>
+            <p class="hero-subtitle">
+                <span class="reveal-text" data-delay="1.6">Scandinavisch design ontmoet Amsterdamse ziel</span>
+            </p>
+            <div class="hero-scroll-indicator reveal-text" data-delay="2.0">
+                <span class="scroll-text">Scroll</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+        <div class="hero-side-text">
+            <span>EST. 2026 — AMSTERDAM</span>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <section class="marquee-section">
+        <div class="marquee">
+            <div class="marquee-track">
+                <span>Walnut Wood</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Scandinavian Design</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Amsterdam Living</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Cape Town Vibes</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Curated Décor</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Walnut Wood</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Scandinavian Design</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Amsterdam Living</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Cape Town Vibes</span>
+                <span class="marquee-dot">&bull;</span>
+                <span>Curated Décor</span>
+                <span class="marquee-dot">&bull;</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy Section -->
+    <section class="philosophy" id="story">
+        <div class="philosophy-inner">
+            <div class="philosophy-label">
+                <span class="label-line"></span>
+                <span>Onze Filosofie</span>
+            </div>
+            <h2 class="philosophy-text split-text">
+                Wij geloven dat een thuis meer is dan vier muren. Het is waar je <em>verhaal</em> begint. Geïnspireerd door de warmte van walnoot, de rust van Scandinavisch design en de vrije geest van Cape Town.
+            </h2>
+            <div class="philosophy-footer">
+                <span class="philosophy-year">Since 2026</span>
+                <span class="philosophy-location">Jordaan, Amsterdam</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Horizontal Scroll Collection -->
+    <section class="horizontal-section" id="collection">
+        <div class="horizontal-trigger">
+            <div class="horizontal-header">
+                <div class="section-label">
+                    <span class="label-line"></span>
+                    <span>De Collectie</span>
+                </div>
+                <h2 class="section-title">Curated<br><em>Pieces</em></h2>
+            </div>
+            <div class="horizontal-track" id="horizontalTrack">
+                <div class="h-card">
+                    <div class="h-card-img-wrap">
+                        <img src="assets/images/walnut-cabinet.png" alt="Walnut Cabinet" class="h-card-img">
+                    </div>
+                    <div class="h-card-info">
+                        <span class="h-card-num">01</span>
+                        <h3 class="h-card-title">Ribbed Glass Cabinet</h3>
+                        <p class="h-card-desc">Walnoot & geribbeld glas</p>
+                        <span class="h-card-price">&euro;289</span>
+                    </div>
+                </div>
+                <div class="h-card">
+                    <div class="h-card-img-wrap">
+                        <img src="assets/images/round-side-table.png" alt="Side Table" class="h-card-img">
+                    </div>
+                    <div class="h-card-info">
+                        <span class="h-card-num">02</span>
+                        <h3 class="h-card-title">Round Side Table</h3>
+                        <p class="h-card-desc">Massief walnoot hout</p>
+                        <span class="h-card-price">&euro;179</span>
+                    </div>
+                </div>
+                <div class="h-card">
+                    <div class="h-card-img-wrap">
+                        <img src="assets/images/tree-bookshelf.png" alt="Tree Bookshelf" class="h-card-img">
+                    </div>
+                    <div class="h-card-info">
+                        <span class="h-card-num">03</span>
+                        <h3 class="h-card-title">Tree Bookshelf</h3>
+                        <p class="h-card-desc">Organisch boekenrek</p>
+                        <span class="h-card-price">&euro;129</span>
+                    </div>
+                </div>
+                <div class="h-card">
+                    <div class="h-card-img-wrap">
+                        <img src="assets/images/wine-rack.png" alt="Wine Rack" class="h-card-img">
+                    </div>
+                    <div class="h-card-info">
+                        <span class="h-card-num">04</span>
+                        <h3 class="h-card-title">Wave Wine Rack</h3>
+                        <p class="h-card-desc">Handgemaakt walnoot</p>
+                        <span class="h-card-price">&euro;89</span>
+                    </div>
+                </div>
+                <div class="h-card">
+                    <div class="h-card-img-wrap">
+                        <img src="assets/images/coffee-station.png" alt="Coffee Station" class="h-card-img">
+                    </div>
+                    <div class="h-card-info">
+                        <span class="h-card-num">05</span>
+                        <h3 class="h-card-title">Coffee Station Shelf</h3>
+                        <p class="h-card-desc">Twee-laags walnoot</p>
+                        <span class="h-card-price">&euro;149</span>
+                    </div>
+                </div>
+                <div class="h-card">
+                    <div class="h-card-img-wrap">
+                        <img src="assets/images/walnut-coasters.png" alt="Coasters" class="h-card-img">
+                    </div>
+                    <div class="h-card-info">
+                        <span class="h-card-num">06</span>
+                        <h3 class="h-card-title">Coaster Set</h3>
+                        <p class="h-card-desc">6x walnoot met houder</p>
+                        <span class="h-card-price">&euro;49</span>
+                    </div>
+                </div>
+                <div class="h-card">
+                    <div class="h-card-img-wrap">
+                        <img src="assets/images/walnut-bookstand.png" alt="Book Stand" class="h-card-img">
+                    </div>
+                    <div class="h-card-info">
+                        <span class="h-card-num">07</span>
+                        <h3 class="h-card-title">Book Stand</h3>
+                        <p class="h-card-desc">Massief walnoot display</p>
+                        <span class="h-card-price">&euro;69</span>
+                    </div>
+                </div>
+                <div class="h-card">
+                    <div class="h-card-img-wrap">
+                        <img src="assets/images/walnut-frames.png" alt="Photo Frames" class="h-card-img">
+                    </div>
+                    <div class="h-card-info">
+                        <span class="h-card-num">08</span>
+                        <h3 class="h-card-title">Photo Frame Set</h3>
+                        <p class="h-card-desc">Walnoot fotolijsten</p>
+                        <span class="h-card-price">&euro;119</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Image Break -->
+    <section class="parallax-break">
+        <div class="parallax-img-wrap">
+            <img src="assets/images/lifestyle-interior.jpeg" alt="Interior Lifestyle" class="parallax-img">
+        </div>
+        <div class="parallax-text-overlay">
+            <h2 class="parallax-quote">"Een huis wordt een thuis<br>met de juiste <em>details</em>"</h2>
+        </div>
+    </section>
+
+    <!-- Art & Books Grid -->
+    <section class="art-section">
+        <div class="art-header">
+            <div class="section-label">
+                <span class="label-line"></span>
+                <span>Kunst & Boeken</span>
+            </div>
+            <h2 class="section-title">Wall Art<br>& <em>Coffee Table</em></h2>
+        </div>
+        <div class="art-grid">
+            <div class="art-item art-item-tall">
+                <div class="art-item-inner">
+                    <img src="assets/images/red-stripe-art.png" alt="Red Stripe Art" class="art-item-img">
+                    <div class="art-item-overlay">
+                        <h3>Red Stripes Print</h3>
+                        <span>&euro;189</span>
+                    </div>
+                </div>
+            </div>
+            <div class="art-item art-item-wide">
+                <div class="art-item-inner">
+                    <img src="assets/images/coffee-table-books.png" alt="Coffee Table Books" class="art-item-img">
+                    <div class="art-item-overlay">
+                        <h3>Book Set — Monet & Living</h3>
+                        <span>&euro;79</span>
+                    </div>
+                </div>
+            </div>
+            <div class="art-item">
+                <div class="art-item-inner">
+                    <img src="assets/images/tennis-martini-art.png" alt="Tennis Martini Art" class="art-item-img">
+                    <div class="art-item-overlay">
+                        <h3>Tennis & Martini Print</h3>
+                        <span>&euro;159</span>
+                    </div>
+                </div>
+            </div>
+            <div class="art-item">
+                <div class="art-item-inner">
+                    <img src="assets/images/vermeer-book.png" alt="Vermeer Book" class="art-item-img">
+                    <div class="art-item-overlay">
+                        <h3>Vermeer — Paintings</h3>
+                        <span>&euro;45</span>
+                    </div>
+                </div>
+            </div>
+            <div class="art-item">
+                <div class="art-item-inner">
+                    <img src="assets/images/acrylic-bookstand.png" alt="Acrylic Stand" class="art-item-img">
+                    <div class="art-item-overlay">
+                        <h3>Acrylic Book Display</h3>
+                        <span>&euro;39</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lifestyle / Cape Town Vibe Section -->
+    <section class="lifestyle-section" id="lifestyle">
+        <div class="lifestyle-split">
+            <div class="lifestyle-left">
+                <div class="lifestyle-img-wrap">
+                    <img src="assets/images/lifestyle-cocktails.jpeg" alt="Cape Town Lifestyle" class="lifestyle-img">
+                </div>
+            </div>
+            <div class="lifestyle-right">
+                <div class="lifestyle-content">
+                    <div class="section-label">
+                        <span class="label-line"></span>
+                        <span>Cape Town Vibes</span>
+                    </div>
+                    <h2 class="lifestyle-title">Live<br><em>Beautifully</em></h2>
+                    <p class="lifestyle-desc">
+                        Van de grachten van Amsterdam tot de kust van Kaapstad — onze collectie brengt die warme, ontspannen sfeer naar jouw huis. Denk golden hour cocktails, zachte texturen en natuurlijke materialen.
+                    </p>
+                    <div class="lifestyle-tags">
+                        <span class="tag">Walnoot Hout</span>
+                        <span class="tag">Scandinavisch</span>
+                        <span class="tag">Warm Minimalisme</span>
+                        <span class="tag">Amsterdam</span>
+                        <span class="tag">Cape Town</span>
+                    </div>
+                    <a href="#contact" class="cta-btn">
+                        <span class="cta-text">Ontdek Meer</span>
+                        <span class="cta-arrow">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Big Number Stats -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat">
+                <span class="stat-num" data-target="200">0</span>
+                <span class="stat-plus">+</span>
+                <span class="stat-label">Curated Items</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-num" data-target="5000">0</span>
+                <span class="stat-plus">+</span>
+                <span class="stat-label">Happy Homes</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat">
+                <span class="stat-num" data-target="12">0</span>
+                <span class="stat-label">Landen Bezorgd</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Newsletter -->
+    <section class="contact-section" id="contact">
+        <div class="contact-inner">
+            <div class="contact-left">
+                <div class="section-label">
+                    <span class="label-line"></span>
+                    <span>Stay In Touch</span>
+                </div>
+                <h2 class="contact-title">Word onderdeel<br>van de <em>TRND</em></h2>
+                <p class="contact-desc">Ontvang als eerste toegang tot nieuwe collecties, exclusieve aanbiedingen en interieur inspiratie.</p>
+            </div>
+            <div class="contact-right">
+                <form class="newsletter-form" onsubmit="event.preventDefault();">
+                    <div class="form-group">
+                        <input type="text" placeholder="Naam" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="E-mail" class="form-input">
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <span>Aanmelden</span>
+                        <span class="submit-arrow">&rarr;</span>
+                    </button>
+                </form>
+                <div class="contact-socials">
+                    <a href="#" class="social-link">Instagram</a>
+                    <a href="#" class="social-link">Pinterest</a>
+                    <a href="#" class="social-link">TikTok</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="footer-logo">TRND<span class="nav-dot">.</span></span>
+                <span class="footer-tagline">Amsterdam Home Décor</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Voorwaarden</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div class="footer-copy">
+                <span>&copy; 2026 TRND Amsterdam. Alle rechten voorbehouden.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
