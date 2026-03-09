@@ -47,6 +47,22 @@
         document.body.style.cursor = 'auto';
     }
 
+    // --- Intro Screen ---
+    const introScreen = document.getElementById('introScreen');
+    if (introScreen) {
+        let introDismissed = false;
+        function dismissIntro() {
+            if (introDismissed) return;
+            introDismissed = true;
+            introScreen.classList.add('hidden');
+        }
+        // Dismiss on scroll or after 3 seconds
+        window.addEventListener('scroll', dismissIntro, { once: true });
+        window.addEventListener('wheel', dismissIntro, { once: true });
+        window.addEventListener('touchmove', dismissIntro, { once: true });
+        setTimeout(dismissIntro, 3000);
+    }
+
     // --- Navigation ---
     const nav = document.getElementById('nav');
     const menuBtn = document.getElementById('menuBtn');
