@@ -116,11 +116,16 @@
 
     let isDragging = false;
     let dragStartX = 0;
+    let dragStartY = 0;
     let dragStartOffset = 0;
     let currentOffset = 0;
-    let lastDragX = 0;
     let dragVelocity = 0;
-    let lastDragTime = 0;
+    let directionLocked = null; // null | 'horizontal' | 'vertical'
+    let animationFrame = null;
+
+    // Velocity tracking with recent history for smoother results
+    const velocityHistory = [];
+    const VELOCITY_WINDOW = 100; // ms - only use recent samples
 
     function getMaxOffset() {
         if (!horizontalInner || !horizontalPin) return 0;
@@ -131,13 +136,33 @@
         return horizontalInner ? horizontalInner.querySelectorAll('.h-card') : [];
     }
 
+    function getCardWidth() {
+        const cards = getCards();
+        if (!cards.length) return 0;
+        return cards[0].offsetWidth + 32;
+    }
+
     function setOffset(offset, animate = false) {
         const max = getMaxOffset();
-        currentOffset = Math.max(0, Math.min(max, offset));
+
+        if (animate) {
+            // Hard clamp for animated snaps
+            currentOffset = Math.max(0, Math.min(max, offset));
+        } else {
+            // Rubber-band effect at edges during drag
+            if (offset < 0) {
+                currentOffset = offset * 0.3; // resistance at start
+            } else if (offset > max) {
+                currentOffset = max + (offset - max) * 0.3; // resistance at end
+            } else {
+                currentOffset = offset;
+            }
+        }
+
         horizontalInner.style.transition = animate
-            ? 'transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+            ? 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)'
             : 'none';
-        horizontalInner.style.transform = `translateX(${-currentOffset}px)`;
+        horizontalInner.style.transform = `translate3d(${-currentOffset}px, 0, 0)`;
         updateCounter();
         updateNavButtons();
     }
@@ -146,8 +171,8 @@
         if (!hCurrentEl || !hTotalEl) return;
         const cards = getCards();
         if (!cards.length) return;
-        const cardWidth = cards[0].offsetWidth + 32;
-        const idx = Math.min(cards.length - 1, Math.round(currentOffset / cardWidth));
+        const cardWidth = getCardWidth();
+        const idx = Math.min(cards.length - 1, Math.round(Math.max(0, currentOffset) / cardWidth));
         hCurrentEl.textContent = idx + 1;
         hTotalEl.textContent = cards.length;
     }
@@ -158,14 +183,57 @@
         hNextBtn.disabled = currentOffset >= getMaxOffset() - 1;
     }
 
-    function snapToCard(velocityHint) {
+    function trackVelocity(clientX) {
+        const now = performance.now();
+        velocityHistory.push({ x: clientX, t: now });
+        // Keep only recent entries
+        while (velocityHistory.length > 0 && now - velocityHistory[0].t > VELOCITY_WINDOW) {
+            velocityHistory.shift();
+        }
+    }
+
+    function getSmoothedVelocity() {
+        if (velocityHistory.length < 2) return 0;
+        const now = performance.now();
+        // Use samples from last 80ms for a smooth average
+        const recent = velocityHistory.filter(v => now - v.t < 80);
+        if (recent.length < 2) {
+            const first = velocityHistory[0];
+            const last = velocityHistory[velocityHistory.length - 1];
+            const dt = last.t - first.t;
+            if (dt === 0) return 0;
+            return (first.x - last.x) / dt * 1000; // px/s
+        }
+        const first = recent[0];
+        const last = recent[recent.length - 1];
+        const dt = last.t - first.t;
+        if (dt === 0) return 0;
+        return (first.x - last.x) / dt * 1000; // px/s
+    }
+
+    function snapToCard(velocityPxPerSec) {
         const cards = getCards();
         if (!cards.length) return;
-        const cardWidth = cards[0].offsetWidth + 32;
-        // Use velocity to determine how many cards to skip
-        const momentum = velocityHint * 0.3;
-        const projectedOffset = currentOffset + momentum;
-        const targetIdx = Math.round(projectedOffset / cardWidth);
+        const cardWidth = getCardWidth();
+        const currentIdx = currentOffset / cardWidth;
+
+        // Flick detection: if velocity is strong enough, always advance at least 1 card
+        const flickThreshold = 250; // px/s
+        let targetIdx;
+
+        if (Math.abs(velocityPxPerSec) > flickThreshold) {
+            // Fast flick - project further for faster swipes
+            const cardsToSkip = Math.min(3, Math.max(1, Math.round(Math.abs(velocityPxPerSec) / 800)));
+            if (velocityPxPerSec > 0) {
+                targetIdx = Math.ceil(currentIdx - 0.001) + cardsToSkip; // swipe left (next)
+            } else {
+                targetIdx = Math.floor(currentIdx + 0.001) - cardsToSkip; // swipe right (prev)
+            }
+        } else {
+            // Slow drag - snap to nearest
+            targetIdx = Math.round(currentIdx);
+        }
+
         const clampedIdx = Math.max(0, Math.min(cards.length - 1, targetIdx));
         setOffset(clampedIdx * cardWidth, true);
     }
@@ -176,21 +244,18 @@
             if (e.target.closest('.h-nav-btn')) return;
             isDragging = true;
             dragStartX = e.clientX;
-            lastDragX = e.clientX;
             dragStartOffset = currentOffset;
             dragVelocity = 0;
-            lastDragTime = Date.now();
+            velocityHistory.length = 0;
+            trackVelocity(e.clientX);
             horizontalPin.classList.add('dragging');
+            horizontalInner.style.transition = 'none';
             e.preventDefault();
         });
 
         window.addEventListener('mousemove', e => {
             if (!isDragging) return;
-            const now = Date.now();
-            const dt = now - lastDragTime || 1;
-            dragVelocity = (lastDragX - e.clientX) / dt * 16; // px per frame
-            lastDragX = e.clientX;
-            lastDragTime = now;
+            trackVelocity(e.clientX);
             setOffset(dragStartOffset + (dragStartX - e.clientX), false);
         });
 
@@ -198,39 +263,74 @@
             if (!isDragging) return;
             isDragging = false;
             horizontalPin.classList.remove('dragging');
-            snapToCard(dragVelocity);
+            snapToCard(getSmoothedVelocity());
         });
 
         // --- Swipe (touch) ---
         horizontalPin.addEventListener('touchstart', e => {
             if (e.target.closest('.h-nav-btn')) return;
+            const touch = e.touches[0];
             isDragging = true;
-            dragStartX = e.touches[0].clientX;
-            lastDragX = e.touches[0].clientX;
+            directionLocked = null;
+            dragStartX = touch.clientX;
+            dragStartY = touch.clientY;
             dragStartOffset = currentOffset;
-            dragVelocity = 0;
-            lastDragTime = Date.now();
+            velocityHistory.length = 0;
+            trackVelocity(touch.clientX);
+            // Cancel any ongoing animation
+            horizontalInner.style.transition = 'none';
         }, { passive: true });
 
         horizontalPin.addEventListener('touchmove', e => {
             if (!isDragging) return;
             const touch = e.touches[0];
-            const diff = dragStartX - touch.clientX;
-            const now = Date.now();
-            const dt = now - lastDragTime || 1;
-            dragVelocity = (lastDragX - touch.clientX) / dt * 16;
-            lastDragX = touch.clientX;
-            lastDragTime = now;
-            if (Math.abs(diff) > 8) {
+            const dx = touch.clientX - dragStartX;
+            const dy = touch.clientY - dragStartY;
+
+            // Direction locking: decide once whether this is a horizontal or vertical gesture
+            if (directionLocked === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+                if (Math.abs(dx) > Math.abs(dy) * 1.2) {
+                    directionLocked = 'horizontal';
+                } else {
+                    directionLocked = 'vertical';
+                }
+            }
+
+            // If vertical, let the browser handle native scrolling
+            if (directionLocked === 'vertical') {
+                isDragging = false;
+                return;
+            }
+
+            // Horizontal: prevent scroll and move carousel
+            if (directionLocked === 'horizontal') {
                 e.preventDefault();
-                setOffset(dragStartOffset + diff, false);
+                trackVelocity(touch.clientX);
+
+                if (animationFrame) cancelAnimationFrame(animationFrame);
+                animationFrame = requestAnimationFrame(() => {
+                    setOffset(dragStartOffset - dx, false);
+                });
             }
         }, { passive: false });
 
-        horizontalPin.addEventListener('touchend', e => {
+        horizontalPin.addEventListener('touchend', () => {
             if (!isDragging) return;
             isDragging = false;
-            snapToCard(dragVelocity);
+            directionLocked = null;
+            if (animationFrame) {
+                cancelAnimationFrame(animationFrame);
+                animationFrame = null;
+            }
+            snapToCard(getSmoothedVelocity());
+        });
+
+        // Cancel drag if touch is interrupted
+        horizontalPin.addEventListener('touchcancel', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            directionLocked = null;
+            snapToCard(0);
         });
     }
 

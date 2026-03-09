@@ -725,6 +725,8 @@ em {
     overflow: hidden;
     cursor: grab;
     user-select: none;
+    touch-action: pan-y; /* allow vertical scroll, we handle horizontal */
+    -webkit-overflow-scrolling: touch;
 }
 
 .horizontal-pin.dragging {
@@ -737,6 +739,10 @@ em {
     padding-left: 4vw;
     will-change: transform;
     pointer-events: none; /* let pin handle drag, re-enable on cards */
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
 }
 
 .h-card {
