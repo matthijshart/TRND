@@ -1528,6 +1528,21 @@ em {
         height: 280px;
     }
 
+    .loader-cities {
+        gap: 0.5rem;
+        margin-top: 0.8rem;
+    }
+
+    .loader-cities span {
+        font-size: 0.85rem;
+        letter-spacing: 0.3em;
+    }
+
+    .loader-sub {
+        font-size: 0.85rem;
+        letter-spacing: 0.3em;
+    }
+
     .contact-section {
         padding: 4rem 1.5rem;
     }
@@ -1557,6 +1572,21 @@ em {
 }
 
 @media (max-width: 480px) {
+    .loader-cities {
+        gap: 0.4rem;
+        margin-top: 0.6rem;
+    }
+
+    .loader-cities span {
+        font-size: 0.75rem;
+        letter-spacing: 0.25em;
+    }
+
+    .loader-sub {
+        font-size: 0.75rem;
+        letter-spacing: 0.25em;
+    }
+
     .title-line .reveal-text {
         font-size: clamp(2.5rem, 12vw, 4rem);
     }
