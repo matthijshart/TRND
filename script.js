@@ -6,16 +6,6 @@
 (function () {
     'use strict';
 
-    // --- Loader ---
-    const loader = document.getElementById('loader');
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            loader.classList.add('hidden');
-            document.querySelector('.hero').classList.add('loaded');
-            animateHeroText();
-        }, 1800);
-    });
-
     // --- Custom Cursor ---
     const cursor = document.getElementById('cursor');
     const follower = document.getElementById('cursor-follower');
@@ -55,17 +45,6 @@
         cursor.style.display = 'none';
         follower.style.display = 'none';
         document.body.style.cursor = 'auto';
-    }
-
-    // --- Hero Text Reveal Animation ---
-    function animateHeroText() {
-        const reveals = document.querySelectorAll('.hero .reveal-text');
-        reveals.forEach(el => {
-            const delay = parseFloat(el.dataset.delay) || 0;
-            setTimeout(() => {
-                el.classList.add('visible');
-            }, delay * 1000);
-        });
     }
 
     // --- Navigation ---
