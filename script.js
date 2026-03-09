@@ -434,6 +434,58 @@
         });
     });
 
+    // --- Image Zoom Lightbox ---
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(imgSrc, imgAlt) {
+        lightboxImg.src = imgSrc;
+        lightboxImg.alt = imgAlt || '';
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Click on h-card image to zoom (ignore if dragging or clicking bestel-btn)
+    let dragDistance = 0;
+    const origMouseDown = horizontalPin ? horizontalPin.onmousedown : null;
+
+    document.querySelectorAll('.h-card').forEach(card => {
+        let cardMouseDownX = 0;
+        card.addEventListener('mousedown', e => { cardMouseDownX = e.clientX; });
+        card.addEventListener('click', e => {
+            if (e.target.closest('.bestel-btn')) return;
+            if (Math.abs(e.clientX - cardMouseDownX) > 10) return; // was a drag
+            const img = card.querySelector('.h-card-img');
+            if (img) openLightbox(img.src, img.alt);
+        });
+    });
+
+    // Click on art-item image to zoom
+    document.querySelectorAll('.art-item').forEach(item => {
+        item.addEventListener('click', e => {
+            if (e.target.closest('.bestel-btn')) return;
+            const img = item.querySelector('.art-item-img');
+            if (img) openLightbox(img.src, img.alt);
+        });
+    });
+
+    // Close lightbox
+    if (lightboxClose) lightboxClose.addEventListener('click', e => { e.stopPropagation(); closeLightbox(); });
+    if (lightbox) {
+        lightbox.addEventListener('click', e => {
+            if (e.target === lightbox) closeLightbox();
+        });
+    }
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+    });
+
     // --- Tag hover ripple ---
     document.querySelectorAll('.tag').forEach(tag => {
         tag.addEventListener('mouseenter', function () {
